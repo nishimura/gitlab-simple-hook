@@ -1,0 +1,12 @@
+[git]
+branch = master
+
+[mail]
+info = "my project updated!"
+
+headers[] = "Content-Type: text/plain; charset=ISO-2022-JP"
+headers[] = "Content-Transfer-Encoding: 7bit"
+
+subject = "[%s] updated!"
+from = "nobody@example.com"
+to = "group@example.com"
