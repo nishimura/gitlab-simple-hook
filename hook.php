@@ -7,13 +7,13 @@ class Hook
         $projectConfig = parse_ini_file('projects.ini', true);
 
         $projects = array();
-        foreach ($projectConfig as $section){
+        foreach ($projectConfig as $key => $section){
             if ($obj->repository->name !== $section['project'])
                 continue;
             if (!preg_match('/'.$section['branch'].'$/', $obj->ref))
                 continue;
 
-            $projects[] = $section;
+            $projects[$key] = $section;
         }
 
         foreach ($projects as $project){
@@ -24,9 +24,7 @@ class Hook
 
         chdir('repositories');
         foreach ($projects as $name => $project)
-            if ($obj->repository->name === $name &&
-                preg_match('/'.$project['branch'].'$/', $obj->ref))
-                $this->runProject($name, $project);
+            $this->runProject($name, $project);
     }
     private function sendMail($obj, $config){
         if (!isset($obj->commits) || !is_array($obj->commits))
