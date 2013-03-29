@@ -46,13 +46,13 @@ class Hook
         $body = '';
         if (isset($config['info'])){
             if (is_array($config['info']))
-                $body .= explode("\n", $config['info']) . "\n\n";
+                $body .= implode("\n", $config['info']) . "\n\n";
             else
                 $body .= $config['info'] . "\n\n";
         }
         if (isset($project['mail.info'])){
             if (is_array($project['mail.info']))
-                $body .= explode("\n", $project['mail.info']) . "\n\n";
+                $body .= implode("\n", $project['mail.info']) . "\n\n";
             else
                 $body .= $project['mail.info'] . "\n\n";
         }
