@@ -52,7 +52,7 @@ class Hook
         }
         if (isset($project['mail.info'])){
             if (is_array($project['mail.info']))
-                $body .= explode("\n", $project['mail.info']);
+                $body .= explode("\n", $project['mail.info']) . "\n\n";
             else
                 $body .= $project['mail.info'] . "\n\n";
         }
