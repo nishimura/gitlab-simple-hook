@@ -10,6 +10,9 @@ class Hook
 
         if (isset($config['mail']) && isset($config['mail']['to']))
             $this->sendMail($obj, $config['mail']);
+
+        if (isset($config['hook']))
+            $this->runHook($config['hook']);
     }
     private function sendMail($obj, $config){
         if (!isset($obj->commits) || !is_array($obj->commits))
@@ -37,6 +40,15 @@ class Hook
 
         $ret = mb_send_mail($to, $subject, $body, $headers, $params);
         // $ret: debug
+    }
+
+    private function hook($config){
+        if (!isset($config['commands']) || !is_array($config['commands']))
+            return;
+
+        foreach ($config['commands'] as $command){
+            exec($command);
+        }
     }
 }
 
