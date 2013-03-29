@@ -19,14 +19,14 @@ class Hook
         foreach ($projects as $project){
             if (isset($config['mail']) && isset($config['mail']['to'])
                 && isset($project['mail']) && $project['mail'])
-                $this->sendMail($obj, $config['mail']);
+                $this->sendMail($obj, $config['mail'], $project);
         }
 
         chdir('repositories');
         foreach ($projects as $name => $project)
             $this->runProject($name, $project);
     }
-    private function sendMail($obj, $config){
+    private function sendMail($obj, $config, $project){
         if (!isset($obj->commits) || !is_array($obj->commits))
             return;
 
@@ -41,6 +41,8 @@ class Hook
         $body = '';
         if (isset($config['info']))
             $body .= $config['info'] . "\n\n";
+        if (isset($project['mailmessage']))
+            $body .= $project['mailmessage'];
         $body .= $obj->repository->homepage . "\n\n";
 
         foreach ($obj->commits as $commit){
