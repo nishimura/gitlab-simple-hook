@@ -16,17 +16,18 @@ class Hook
             $projects[$key] = $section;
         }
 
+        chdir('repositories');
+        $ret = '';
+        foreach ($projects as $name => $project)
+            $ret .= $this->runProject($name, $project) . "\n\n";
+
         foreach ($projects as $project){
             if (isset($config['mail']) && isset($config['mail']['to'])
                 && isset($project['mail']) && $project['mail'])
-                $this->sendMail($obj, $config['mail'], $project);
+                $this->sendMail($obj, $config['mail'], $project, $ret);
         }
-
-        chdir('repositories');
-        foreach ($projects as $name => $project)
-            $this->runProject($name, $project);
     }
-    private function sendMail($obj, $config, $project){
+    private function sendMail($obj, $config, $project, $ret){
         if (!isset($obj->commits) || !is_array($obj->commits))
             return;
 
@@ -65,27 +66,38 @@ class Hook
         }
 
         $body .= "----\n";
+        $body .= 'Result: ' . $ret;
+        $body .= "----\n";
         $body .= 'GitLab: ' . $obj->repository->homepage . "\n\n";
         $ret = mb_send_mail($to, $subject, $body, $headers, $params);
         // $ret: debug
     }
 
     private function runProject($name, $project){
+        $out;
+        $ret;
         if (!file_exists($name)){
-            exec('git clone ' . $project['repository'] . " $name");
+            exec('git clone ' . $project['repository'] . " $name", $out, $ret);
             chdir($name);
         }else{
             chdir($name);
-            exec('git pull');
+            exec('git pull', $out, $ret);
         }
 
         if (!isset($project['commands']) || !is_array($project['commands']))
             return;
 
-        foreach ($project['commands'] as $command)
-            exec($command);
+        foreach ($project['commands'] as $command){
+            exec($command, $out, $ret);
+            if ($ret){
+                $out[] = "Error: ";
+                $out[] = "$command return code $ret";
+                break;
+            }
+        }
 
         chdir('..');
+        return implode("\n", $out);
     }
 }
 
