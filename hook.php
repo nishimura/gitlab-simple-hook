@@ -16,7 +16,8 @@ class Hook
 
         $projects = parse_ini_file('projects.ini', true);
         foreach ($projects as $name => $project)
-            $this->runProject($name, $project);
+            if ($obj->repository->name === $name)
+                $this->runProject($name, $project);
     }
     private function sendMail($obj, $config){
         if (!isset($obj->commits) || !is_array($obj->commits))
