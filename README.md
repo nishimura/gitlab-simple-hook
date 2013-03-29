@@ -9,6 +9,7 @@ This is simple GitLab Web Hooks scripts.
     vi config.ini # edit mail address and other variables.
     cp projects.ini.sample projects.ini
     vi projects.ini # edit project information
+    chmod o+w repositories
 
 ## Setup & Test
 
