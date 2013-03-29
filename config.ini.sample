@@ -1,6 +1,3 @@
-[git]
-branch = master
-
 [mail]
 info = "my project updated!"
 

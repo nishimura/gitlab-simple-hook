@@ -1,0 +1,6 @@
+[my-project]
+branch = master
+project = gitlab-project-name
+mail = 1
+repository = "git@gitlab.example.com:my-project.git"
+commands[] = "ssh user@remote.host 'cd public_html/my-project; git pull'"
