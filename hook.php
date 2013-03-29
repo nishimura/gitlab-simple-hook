@@ -64,7 +64,6 @@ class Hook
             chdir($name);
             exec('git pull');
         }
-        $this->initPull();
 
         if (!isset($project['commands']) || !is_array($project['commands']))
             return;
