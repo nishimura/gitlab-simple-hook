@@ -5,6 +5,7 @@ mail = 1
 mail.info[] = "Released!"
 mail.info[] = "URL: http://example.com/"
 repository = "git@gitlab.example.com:my-project.git"
+commands[] = "./my-test.sh"
 commands[] = "ssh user@remote.host 'cd public_html/my-project; git pull'"
 
 [my-project-dev]
