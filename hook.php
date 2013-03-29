@@ -42,7 +42,7 @@ class Hook
         // $ret: debug
     }
 
-    private function hook($config){
+    private function runHook($config){
         if (!isset($config['commands']) || !is_array($config['commands']))
             return;
 
