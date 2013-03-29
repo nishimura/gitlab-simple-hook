@@ -58,17 +58,22 @@ class Hook
     }
 
     private function runProject($name, $project){
-        if (!file_exists($name))
-            $this->initPull($project['repository']);
+        if (!file_exists($name)){
+            exec('git clone ' . $project['repository'] . " $name");
+            chdir($name);
+        }else{
+            chdir($name);
+            exec('git pull');
+        }
+        $this->initPull();
 
         if (!isset($project['commands']) || !is_array($project['commands']))
             return;
 
         foreach ($project['commands'] as $command)
             exec($command);
-    }
-    private function initPull($url){
-        exec('git clone ' . $url);
+
+        chdir('..');
     }
 }
 
