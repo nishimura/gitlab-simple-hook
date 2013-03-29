@@ -1,4 +1,7 @@
 [mail]
+lang = "japanese"
+internalEncoding = "UTF-8"
+
 info = "my project updated!"
 
 headers[] = "Content-Type: text/plain; charset=ISO-2022-JP"

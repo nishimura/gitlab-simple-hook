@@ -30,6 +30,11 @@ class Hook
         if (!isset($obj->commits) || !is_array($obj->commits))
             return;
 
+        if (isset($config['lang']))
+            mb_language($config['lang']);
+        if (isset($config['internalEncoding']))
+            mb_internal_encoding($config['internalEncoding']);
+
         $to = $config['to'];
         $from = $config['from'];
         $config['headers'][] = 'From: ' . $from;
