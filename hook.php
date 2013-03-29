@@ -75,17 +75,18 @@ class Hook
 
     private function runProject($name, $project){
         $out = array();
-        $ret;
+        $ret = 0;
         if (!file_exists($name)){
-            exec('git clone ' . $project['repository'] . " $name", $out, $ret);
+            exec('git clone ' . $project['repository'] . " $name", $out);
             chdir($name);
+            exec('git checkout ' . $project['branch'], $out);
         }else{
             chdir($name);
-            exec('git pull', $out, $ret);
+            exec('git pull', $out);
         }
 
         if (!isset($project['commands']) || !is_array($project['commands']))
-            return;
+            return '';
 
         foreach ($project['commands'] as $command){
             exec($command, $out, $ret);
