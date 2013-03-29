@@ -42,7 +42,7 @@ class Hook
         if (isset($config['info']))
             $body .= $config['info'] . "\n\n";
         if (isset($project['mailmessage']))
-            $body .= $project['mailmessage'];
+            $body .= $project['mailmessage'] . "\n\n";
         $body .= $obj->repository->homepage . "\n\n";
 
         foreach ($obj->commits as $commit){
