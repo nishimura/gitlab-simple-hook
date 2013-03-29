@@ -15,6 +15,7 @@ class Hook
             $this->runHook($config['hook']);
 
         $projects = parse_ini_file('projects.ini', true);
+        chdir('repositories');
         foreach ($projects as $name => $project)
             if ($obj->repository->name === $name)
                 $this->runProject($name, $project);
@@ -57,7 +58,6 @@ class Hook
     }
 
     private function runProject($name, $project){
-        chdir('repositories');
         if (!file_exists($name))
             $this->initPull($project['repository']);
 
