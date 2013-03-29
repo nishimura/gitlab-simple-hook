@@ -13,6 +13,10 @@ class Hook
 
         if (isset($config['hook']))
             $this->runHook($config['hook']);
+
+        $projects = parse_ini_file('projects.ini', true);
+        foreach ($projects as $name => $project)
+            $this->runProject($name, $project);
     }
     private function sendMail($obj, $config){
         if (!isset($obj->commits) || !is_array($obj->commits))
@@ -49,6 +53,21 @@ class Hook
         foreach ($config['commands'] as $command){
             exec($command);
         }
+    }
+
+    private function runProject($name, $project){
+        chdir('repositories');
+        if (!file_exists($name))
+            $this->initPull($project['repository']);
+
+        if (!isset($project['commands']) || !is_array($project['commands']))
+            return;
+
+        foreach ($project['commands'] as $command)
+            exec($command);
+    }
+    private function initPull($url){
+        exec('git clone ' . $url);
     }
 }
 
