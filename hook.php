@@ -66,7 +66,7 @@ class Hook
         }
 
         $body .= "----\n";
-        $body .= 'Result: ' . $ret;
+        $body .= "Result:\n$ret";
         $body .= "----\n";
         $body .= 'GitLab: ' . $obj->repository->homepage . "\n\n";
         $ret = mb_send_mail($to, $subject, $body, $headers, $params);
@@ -74,7 +74,7 @@ class Hook
     }
 
     private function runProject($name, $project){
-        $out;
+        $out = array();
         $ret;
         if (!file_exists($name)){
             exec('git clone ' . $project['repository'] . " $name", $out, $ret);
@@ -91,7 +91,7 @@ class Hook
             exec($command, $out, $ret);
             if ($ret){
                 $out[] = "Error: ";
-                $out[] = "$command return code $ret";
+                $out[] = "'$command' return code $ret";
                 break;
             }
         }
