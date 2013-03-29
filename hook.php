@@ -44,11 +44,18 @@ class Hook
         $params = "-f$from";
 
         $body = '';
-        if (isset($config['info']))
-            $body .= $config['info'] . "\n\n";
-        if (isset($project['mailmessage']))
-            $body .= $project['mailmessage'] . "\n\n";
-        $body .= $obj->repository->homepage . "\n\n";
+        if (isset($config['info'])){
+            if (is_array($config['info']))
+                $body .= explode("\n", $config['info']) . "\n\n";
+            else
+                $body .= $config['info'] . "\n\n";
+        }
+        if (isset($project['mail.info'])){
+            if (is_array($project['mail.info']))
+                $body .= explode("\n", $project['mail.info']);
+            else
+                $body .= $project['mail.info'] . "\n\n";
+        }
 
         foreach ($obj->commits as $commit){
             $body .= '* ' . $commit->message . "\n";
@@ -57,6 +64,8 @@ class Hook
                 . ' ' . $commit->author->name . "\n\n";
         }
 
+        $body .= "----\n";
+        $body .= 'GitLab: ' . $obj->repository->homepage . "\n\n";
         $ret = mb_send_mail($to, $subject, $body, $headers, $params);
         // $ret: debug
     }

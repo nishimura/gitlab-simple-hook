@@ -2,6 +2,8 @@
 branch = master
 project = gitlab-project-name
 mail = 1
+mail.info[] = "Released!"
+mail.info[] = "URL: http://example.com/"
 repository = "git@gitlab.example.com:my-project.git"
 commands[] = "ssh user@remote.host 'cd public_html/my-project; git pull'"
 
@@ -9,5 +11,6 @@ commands[] = "ssh user@remote.host 'cd public_html/my-project; git pull'"
 branch = develop
 project = gitlab-project-name
 mail = 1
+mail.info = "develop version"
 repository = "git@gitlab.example.com:my-project.git"
 commands[] = "./my-test.sh"
