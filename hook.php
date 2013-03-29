@@ -4,20 +4,28 @@ class Hook
 {
     public function run($obj){
         $config = parse_ini_file('config.ini', true);
-        $branch = $config['git']['branch'];
-        if (!preg_match('/'.$branch.'$/', $obj->ref))
-            return;
+        $projectConfig = parse_ini_file('projects.ini', true);
 
-        if (isset($config['mail']) && isset($config['mail']['to']))
-            $this->sendMail($obj, $config['mail']);
+        $projects = array();
+        foreach ($projectConfig as $section){
+            if ($obj->repository->name !== $section['project'])
+                continue;
+            if (!preg_match('/'.$section['branch'].'$/', $obj->ref))
+                continue;
 
-        if (isset($config['hook']))
-            $this->runHook($config['hook']);
+            $projects[] = $section;
+        }
 
-        $projects = parse_ini_file('projects.ini', true);
+        foreach ($projects as $project){
+            if (isset($config['mail']) && isset($config['mail']['to'])
+                && isset($project['mail']) && $project['mail'])
+                $this->sendMail($obj, $config['mail']);
+        }
+
         chdir('repositories');
         foreach ($projects as $name => $project)
-            if ($obj->repository->name === $name)
+            if ($obj->repository->name === $name &&
+                preg_match('/'.$project['branch'].'$/', $obj->ref))
                 $this->runProject($name, $project);
     }
     private function sendMail($obj, $config){
@@ -46,15 +54,6 @@ class Hook
 
         $ret = mb_send_mail($to, $subject, $body, $headers, $params);
         // $ret: debug
-    }
-
-    private function runHook($config){
-        if (!isset($config['commands']) || !is_array($config['commands']))
-            return;
-
-        foreach ($config['commands'] as $command){
-            exec($command);
-        }
     }
 
     private function runProject($name, $project){
