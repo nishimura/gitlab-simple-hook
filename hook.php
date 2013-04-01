@@ -58,19 +58,32 @@ class Hook
                 $body .= $project['mail.info'] . "\n\n";
         }
 
+        $issues = array();
         foreach ($obj->commits as $commit){
+            $issue = $this->parseIssue($commit->message);
+            if ($issue)
+                $issues[] = $issue;
             $body .= '* ' . $commit->message . "\n";
             $body .= '    '
                 . date('Y-m-d H:i:s', strtotime($commit->timestamp))
                 . ' ' . $commit->author->name . "\n\n";
         }
 
+        if ($issues)
+            $body .= "----\nIssues:\n" . implode('\n', $issues);
         $body .= "----\n";
         $body .= "Result:\n$ret";
         $body .= "----\n";
         $body .= 'GitLab: ' . $obj->repository->homepage . "\n\n";
         $ret = mb_send_mail($to, $subject, $body, $headers, $params);
         // $ret: debug
+    }
+    private function parseIssue($project, $message){
+        if (isset($project['issues.url'])
+            && preg_match('/#[0-9]+/', $message))
+            return preg_replace('/#([0-9]+)/',
+                                $project['issues.url'] . '/$1', $message);
+        return false;
     }
 
     private function runProject($name, $project){
