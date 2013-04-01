@@ -70,7 +70,7 @@ class Hook
         }
 
         if ($issues)
-            $body .= "----\nIssues:\n" . implode('\n', $issues) . "\n\n";
+            $body .= "----\nIssues:\n" . implode("\n", $issues) . "\n\n";
         $body .= "----\n";
         $body .= "Result:\n$ret";
         $body .= "----\n";
