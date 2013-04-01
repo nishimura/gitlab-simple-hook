@@ -60,7 +60,7 @@ class Hook
 
         $issues = array();
         foreach ($obj->commits as $commit){
-            $issue = $this->parseIssue($commit->message);
+            $issue = $this->parseIssue($project, $commit->message);
             if ($issue)
                 $issues[] = $issue;
             $body .= '* ' . $commit->message . "\n";
