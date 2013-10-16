@@ -10,7 +10,7 @@ class Hook
         foreach ($projectConfig as $key => $section){
             if ($obj->repository->name !== $section['project'])
                 continue;
-            if (!preg_match('/'.$section['branch'].'$/', $obj->ref))
+            if (!preg_match('|^refs/heads/'.$section['branch'].'$|', $obj->ref))
                 continue;
 
             $projects[$key] = $section;
